@@ -1,6 +1,10 @@
 import cv2
 import numpy as np 
 
+# img_file = "image2.jpg"
+img_file = "room_ser.jpg"
+# img_file = "room.jpg"
+
 ## Load YOLO
 net = cv2.dnn.readNet("yolov3.weights", "yolov3.cfg") # network
 
@@ -12,7 +16,7 @@ layer_names = net.getLayerNames()
 output_layers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 
 ## Load Image
-img = cv2.imread("room_ser.jpg")
+img = cv2.imread(img_file)
 img = cv2.resize(img, None, fx = 0.4, fy = 0.4)
 
 ## Keep track of height and width
@@ -42,7 +46,7 @@ for out in outs:
 		scores = detection[5:]
 		class_id = np.argmax(scores)
 		confidence = scores[class_id]
-		if confidence > 0.3:
+		if confidence > 0.1:
 
 			# print("out:", out)
 			# print("detection:", detection)
