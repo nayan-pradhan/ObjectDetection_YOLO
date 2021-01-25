@@ -1,9 +1,7 @@
 import cv2
 import numpy as np 
 
-# img_file = "image2.jpg"
-img_file = "room_ser.jpg"
-# img_file = "room.jpg"
+img_file = "image_demo.jpg"
 
 ## Load YOLO
 net = cv2.dnn.readNet("yolov3.weights", "yolov3.cfg") # network
@@ -17,7 +15,7 @@ output_layers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 
 ## Load Image
 img = cv2.imread(img_file)
-img = cv2.resize(img, None, fx = 0.4, fy = 0.4)
+# img = cv2.resize(img, None, fx = 0.4, fy = 0.4)
 
 ## Keep track of height and width
 height, width, channels = img.shape
@@ -46,7 +44,7 @@ for out in outs:
 		scores = detection[5:]
 		class_id = np.argmax(scores)
 		confidence = scores[class_id]
-		if confidence > 0.1:
+		if confidence > 0.5:
 
 			# print("out:", out)
 			# print("detection:", detection)
@@ -82,7 +80,7 @@ for i in range(len(boxes)):
 		label = str(classes[class_ids[i]])
 		color = colors[class_ids[i]]
 		cv2.rectangle(img, (x,y), (x+w, y+h), color, 2)
-		cv2.putText(img, label, (x, y+h-10), font, 3, color, 3)
+		cv2.putText(img, label, (x, y+h-10), font, 2, color, 2)
 		print(label)
 
 cv2.imshow("Image", img)
