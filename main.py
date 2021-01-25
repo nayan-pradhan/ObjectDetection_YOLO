@@ -68,7 +68,7 @@ for out in outs:
 
 print("Number of objects detected: ", len(boxes))
 
-indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.5, 0.4) ## For Non-Maximal Supression
+indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.5, 0.4) ## For Non-Maximum Suppression
 # print(indexes)
 
 font = cv2.FONT_HERSHEY_PLAIN
