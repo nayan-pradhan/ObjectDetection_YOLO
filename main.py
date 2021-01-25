@@ -42,7 +42,7 @@ for out in outs:
 		scores = detection[5:]
 		class_id = np.argmax(scores)
 		confidence = scores[class_id]
-		if confidence > 0.9:
+		if confidence > 0.3:
 
 			# print("out:", out)
 			# print("detection:", detection)
@@ -58,7 +58,7 @@ for out in outs:
 			## Rectangle box coordinates
 			x = int(center_x - w/2) ## top left x
 			y = int(center_y - h/2) ## top left y
-			cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
+			# cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
 
 			boxes.append([x , y, w, h])
 			confidences.append(float(confidence))
@@ -66,16 +66,21 @@ for out in outs:
 
 print("Number of objects detected: ", len(boxes))
 
+indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.5, 0.4) ## For Non-Maximal Supression
+# print(indexes)
+
 font = cv2.FONT_HERSHEY_PLAIN
+colors = np.random.uniform(0,255,size=(len(classes), 3))
+
 for i in range(len(boxes)):
-	x, y, w, h = boxes[i]
-	label = str(classes[class_ids[i]])
-	cv2.rectangle(img, (x,y), (x+w, y+h), (0, 255, 0), 2)
-	cv2.putText(img, label, (x, y+h-10), font, 1, (0,0,0), 1)
-	print(label)
+	if i in indexes:
+		x, y, w, h = boxes[i]
+		label = str(classes[class_ids[i]])
+		color = colors[class_ids[i]]
+		cv2.rectangle(img, (x,y), (x+w, y+h), color, 2)
+		cv2.putText(img, label, (x, y+h-10), font, 3, color, 3)
+		print(label)
 
 cv2.imshow("Image", img)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
-
-
